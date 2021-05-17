@@ -55,41 +55,42 @@ class Config{
 	private $captcha_private_key;
 	private $cookie_name;
     public function __construct(){
-	    $this->title              =       'Example Social Network';
-		$this->secure			  =       1; // 1 for https
-		$this->domain			  =       'example.com'; // false for http
-		$this->ui_context         =       '/socialnetwork';
-		$this->service_context    =       '/backendservice';
-		$this->path          	  =       '/home/socialnetwork/public_html/backendservice';
-		$this->media_path         =       $this->path.'/media';
-		$this->img_path           =       $this->path.'/img';
-		$this->imagemagick        =       'convert'; // path to imagemagick
-		$this->bin                =       "/usr/local/bin";
-		$this->ffmpeg             =       $this->bin."/ffmpeg"; // path to ffmpeg
-		$this->ffmpeg_args        =       "-acodec libfaac -ab 96k -vcodec libx264 -vpre slower -vpre main -level 21 -refs 2 -b 345k -bt 345k -threads 0 -s 640x360";
-		$this->rotate_video_cmd   =       "mencoder -ovc lavc -vf rotate=1 -oac pcm"; // path to mencoder (or ffmpeg)
-		$this->ffprobe            =       $this->bin."/ffprobe"; // path to ffprobe
-		$this->qt_faststart       =       $this->bin."/qt-faststart"; // path to qt-faststart
-		$this->mysql_url          =       'localhost';
-		$this->mysql_database     =       'socialnetwork_db';
-		$this->mysql_user         =       'socialnetwork';
-		$this->mysql_password     =       'password';
-		$this->admin_id           =       '1';
-		$this->admin_user         =       'admin';
-		$this->admin_email        =       'admin@socialnetwork.com';
-		$this->css_color          =       '#A67D3D';
-		$this->css_font_color     =       '#333333';
-		$this->css_link_color     =       '#00007f';
-		$this->css_menu_color     =       '#FFFFCC';
-		$this->css_font_family    =       'Arial';
-		$this->css_banner_img     =       $this->ui_context.'/img/banner_bg.jpg';
-		$this->css_reply_1_color  =       '#FFF380';
-		$this->css_reply_2_color  =       '#FFFFAA';
-		$this->smtp_host		  =		  'example.com';
-		$this->smtp_port		  =		  465;
-		$this->admin_email_password =     'password';
-		$this->captcha_private_key =      'google-captcha-private-sitekey';
-		$this->cookie_name		  =       'socialnetwork';
+		$env = parse_ini_file(".env");		
+	    $this->title              =       $env["title"];//'Example Social Network';
+		$this->secure			  =       $env["secure"];//1; // 1 for https
+		$this->domain			  =       $env["domain"];//'example.com'; // false for http
+		$this->ui_context         =       $env["ui_context"];//'/socialnetwork';
+		$this->service_context    =       $env["service_context"];//'/backendservice';
+		$this->path          	  =       $env["path"];//'/home/socialnetwork/public_html/backendservice';
+		$this->media_path         =       $env["media_path"];//$this->path.'/media';
+		$this->img_path           =       $env["img_path"];//$this->path.'/img';
+		$this->imagemagick        =       $env["imagemagick"];//'convert'; // path to imagemagick
+		$this->bin                =       $env["bin"];//"/usr/local/bin";
+		$this->ffmpeg             =       $env["ffmpeg"];//$this->bin."/ffmpeg"; // path to ffmpeg
+		$this->ffmpeg_args        =       $env["ffmpeg_args"];//"-acodec libfaac -ab 96k -vcodec libx264 -vpre slower -vpre main -level 21 -refs 2 -b 345k -bt 345k -threads 0 -s 640x360";
+		$this->rotate_video_cmd   =       $env["rotate_video_cmd"];//"mencoder -ovc lavc -vf rotate=1 -oac pcm"; // path to mencoder (or ffmpeg)
+		$this->ffprobe            =       $env["ffprobe"];//$this->bin."/ffprobe"; // path to ffprobe
+		$this->qt_faststart       =       $env["qt_faststart"];//$this->bin."/qt-faststart"; // path to qt-faststart
+		$this->mysql_url          =       $env["mysql_url"];//'localhost';
+		$this->mysql_database     =       $env["mysql_database"];//'socialnetwork_db';
+		$this->mysql_user         =       $env["mysql_user"];//'socialnetwork';
+		$this->mysql_password     =       $env["mysql_password"];//'password';
+		$this->admin_id           =       $env["admin_id"];//'1';
+		$this->admin_user         =       $env["admin_user"];//'admin';
+		$this->admin_email        =       $env["admin_email"];//'admin@socialnetwork.com';
+		$this->css_color          =       $env["css_color"];//'#A67D3D';
+		$this->css_font_color     =       $env["css_font_color"];//'#333333';
+		$this->css_link_color     =       $env["css_link_color"];//'#00007f';
+		$this->css_menu_color     =       $env["css_menu_color"];//'#FFFFCC';
+		$this->css_font_family    =       $env["css_font_family"];//'Arial';
+		$this->css_banner_img     =       $env["css_banner_img"];//$this->ui_context.'/img/banner_bg.jpg';
+		$this->css_reply_1_color  =       $env["css_reply_1_color"];//'#FFF380';
+		$this->css_reply_2_color  =       $env["css_reply_2_color"];//'#FFFFAA';
+		$this->smtp_host		  =		  $env["smtp_host"];//'example.com';
+		$this->smtp_port		  =		  $env["smtp_port"];//465;
+		$this->admin_email_password =     $env["admin_email_password"];//'password';
+		$this->captcha_private_key =      $env["captcha_private_key"];//'google-captcha-private-sitekey';
+		$this->cookie_name		  =       $env["cookie_name"];//'socialnetwork';
 	}
 	public function get_title(){ return $this->title; }
     public function get_ui_context(){ return $this->ui_context; }
