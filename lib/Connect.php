@@ -19,12 +19,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
 require_once(dirname(__FILE__).'/password.php');
-require_once(dirname(__FILE__).'/LocalConfig.php');
+require_once(dirname(__FILE__).'/Config.php');
 class Connect extends Config{
 	public static $DATE_DISPLAY_FORMAT = "D M j Y g:i A";
 	public static $SUCCESS = "SUCCESS";
 	public static $FAIL = "FAIL";
 	public static $TERMS = "TERMS";
+	public static $PERMS = "PERMS";
 	private $output;
 	private $db;
 	public function __construct(){

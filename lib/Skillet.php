@@ -259,13 +259,13 @@ class Skillet extends Connect{
 			$message .= "Refresh your browser.  ";
 			$message .= "That's it!  You will now see ".$userFirstName."'s posts and ".$userFirstName." will see yours.";			
 			if($this->sendMail($to, $subject, $message)){
-				$gcotd_msg = "Friend Request Sent.";
+				$gcotd_msg = "Request Sent.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);				
 			}
 			else{
 				$gcotd_msg="For whatever reason I ".
-					"failed to send an email to $requestUser with your friend request.".
-					"  If you know their email please contact them directly.\r\n".
+					"failed to send an email with your request.".
+					"  Please contact ".$this->get_admin_email().".\r\n".
 					"Sorry for the inconvenience.";
 				$this->setOutput(self::$FAIL, $gcotd_msg);
 			}

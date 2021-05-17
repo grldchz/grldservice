@@ -335,7 +335,10 @@ class Posts extends Connect{
 				$postOpenPublic = 1;
 			}
 			else{
-				throw new Exception("You must be friends with Guest to post public content.");
+				$msg = "You are not authorized to post public content.";
+			    $this->setOutput(self::$PERMS, $msg);
+				print $this->printOutput();
+				exit;
 			}				
 		}
 		else{
