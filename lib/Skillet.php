@@ -124,8 +124,8 @@ class Skillet extends Connect{
 				inner join contents c on c.id=:content_id and c.user_name = u.name
 				inner join skillet s on 
 					((s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id)
-					or (s.user_id = u.id and s.friend_id = '".$this->auth->user_data['id']."'))
-					or c.open_public = 1
+					or (s.user_id = u.id and s.friend_id = '".$this->auth->user_data['id']."')
+					or c.open_public = 1)
 					and s.accepted='0'
 				";
 		
