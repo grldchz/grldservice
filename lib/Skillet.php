@@ -63,7 +63,9 @@ class Skillet extends Connect{
 					or u.first_name like :first_name 
 					or u.last_name like :last_name) 
 					and	u.name <> :admin_user
-					and u.id <> :user_id";
+					and u.id <> :user_id 
+					and	u.name <> \"guest\"
+					and u.id <> \"2\"";
 			if(isset($skilletUserId)){
 				$userSql .= " and (u.id=s.user_id or u.id=s.friend_id) group by u.id";
 			}
