@@ -23,8 +23,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Load Composer's autoloader
-require (dirname(__FILE__).'/../../vendor/autoload.php');
+require (dirname(__FILE__).'/../../vendor/PHPMailer/src/Exception.php');
+require (dirname(__FILE__).'/../../vendor/PHPMailer/src/PHPMailer.php');
+require (dirname(__FILE__).'/../../vendor/PHPMailer/src/SMTP.php');
 require_once(dirname(__FILE__).'/Connect.php');
 class Mailer extends Connect{
 	public function __construct(){
