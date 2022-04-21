@@ -15,9 +15,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# [GRLDCHZ](https://github.com/grldchz/grldchz-ts)   |    GRLDSERVICE    |    [GRLDENV](https://github.com/grldchz/grldenv)
+# GRLDSERVICE
 
-PHP REST-like service for backing grldchz social network.  grldchz is a social networking platform where you can post text, photos, and videos.
+PHP REST-like service for backing [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
 
 REST-like in that all calls to it respond with JSON.
 
@@ -25,14 +25,14 @@ Photos are processed into lower resolution, space saving web format, that allows
 
 ## Run-time Dependencies
 
-apache
-imagemagick
-mysql
-php
-php extension pdo
-php extension pdo_mysql
-phpmailer
-sendmail
+* apache
+* imagemagick
+* mysql
+* php
+* php extension pdo
+* php extension pdo_mysql
+* phpmailer
+* sendmail
 
 ## Get Started
 
@@ -43,7 +43,3 @@ Execute grldchz.sql on the MySQL Database
 Create lib/.env for your environment.  See lib/example.env for more info.
 
 Copy the grldservice directory to public_html directory of Apache
-
-see <a href="https://github.com/grldchz/grldchz-env">grldchz-env</a> for info on set it up inside Docker
-
-see <a href="https://github.com/grldchz/grldchz">grldchz</a> for info on the UI
