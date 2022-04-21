@@ -1,31 +1,49 @@
-# grldservice
+GRLDCHZ Social network
+
+Copyright (C) 2022 grilledcheeseoftheday.com
+
+GRLDCHZ is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+GRLDCHZ is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# [GRLDCHZ](https://github.com/grldchz/grldchz-ts)   |    GRLDSERVICE    |    [GRLDENV](https://github.com/grldchz/grldenv)
+
 PHP REST-like service for backing grldchz social network.  grldchz is a social networking platform where you can post text, photos, and videos.
 
 REST-like in that all calls to it respond with JSON.
 
-Photos and videos are processed into lower resolution, space saving web format, that allows for faster load times over the internet.
+Photos are processed into lower resolution, space saving web format, that allows for faster load times over the internet.
 
-Assumptions: 
-<br>grldservice is installed on a LAMP or WAMP system
-<br>ImageMagick, Mencoder, and FFMPEG are installed on target system.  Adjustments would have to be made to the ffmpeg_args variable in lib/Config.php to work with target system FFMPEG version.
+## Run-time Dependencies
 
-Install Bitnami WAMP (easiest way to get started)
+apache
+imagemagick
+mysql
+php
+php extension pdo
+php extension pdo_mysql
+phpmailer
+sendmail
 
-The following php.ini entries are optional:
-<blockquote>
-<br>date.timezone='US/Eastern'
-<br>log_errors=On
-<br>error_log='/&lt;root&gt;/public_html/errors.log'
-<br>memory_limit = 256M
-<br>upload_max_filesize = 256M
-<br>post_max_size =  256M
-<br>max_execution_time = 200
-</blockquote>
+## Get Started
+
+Either create database grldchz manually or uncomment create database lines in grldchz.sql.
+
+Execute grldchz.sql on the MySQL Database
+
+Create lib/.env for your environment.  See lib/example.env for more info.
+
+Copy the grldservice directory to public_html directory of Apache
+
+see <a href="https://github.com/grldchz/grldchz-env">grldchz-env</a> for info on set it up inside Docker
 
 see <a href="https://github.com/grldchz/grldchz">grldchz</a> for info on the UI
-
-<p>Steps to Install:</p>
-Either create database grldchz manually or uncomment create database lines in grldchz.sql.
-Execute grldchz.sql on the MySQL Database
-<br>Copy the grldservice directory to public_html directory of Apache
-<br>

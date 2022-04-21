@@ -104,16 +104,43 @@ class Auth extends Connect{
 			else{
 				$gcotd_msg="Terms not accepted";
 				$this->setOutput(self::$TERMS, $gcotd_msg);
-				setcookie($this->get_cookie_name()."terms", true, time() + 
-					(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+
+				$arr_cookie_options = array (
+					'expires' => time() + (60 * 60 * 24 * 184),
+					'path' => '/',
+					'domain' => $this->get_domain(),
+					'secure' => $this->get_secure(),
+					'httponly' => true,
+					'samesite' => 'Strict'
+                );
+				if (explode('.', PHP_VERSION)[0] < 7){
+					setcookie($this->get_cookie_name()."terms", true, time() +
+                        (60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+				}
+				else{
+					setcookie($this->get_cookie_name()."terms", true, $arr_cookie_options);
+				}
 				print $this->printOutput();
 				exit;
 			}
 		}
 		else
 		{
-			setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], 
-				time() + (60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1);
+			$arr_cookie_options = array (
+				'expires' => time() + (60 * 60 * 24 * 184),
+				'path' => '/',
+				'domain' => $this->get_domain(),
+				'secure' => $this->get_secure(),
+				'httponly' => true,
+				'samesite' => 'Strict'
+			);
+			if (explode('.', PHP_VERSION)[0] < 7){
+				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], time() +
+					(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+			}
+			else{
+				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], $arr_cookie_options);
+			}
 			//update login time
 			$date = date("Y-m-d H:i:s");
 			$this->getDb()->query("UPDATE users SET last_login='".$date."' 
@@ -169,8 +196,21 @@ class Auth extends Connect{
 					$stmt->execute();
 					
 					if ($stmt->rowCount() > 0){
-						setcookie($this->get_cookie_name(), $this->user_data['id'].".".$newpassword, 
-							time() + (60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1);
+						$arr_cookie_options = array (
+							'expires' => time() + (60 * 60 * 24 * 184),
+							'path' => '/',
+							'domain' => $this->get_domain(),
+							'secure' => $this->get_secure(),
+							'httponly' => true,
+							'samesite' => 'Strict'
+						);
+						if (explode('.', PHP_VERSION)[0] < 7){
+							setcookie($this->get_cookie_name(), $this->user_data['id'].".".$newpassword, time() +
+								(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+						}
+						else{
+							setcookie($this->get_cookie_name(), $this->user_data['id'].".".$newpassword, $arr_cookie_options);
+						}
 						$gcotd_msg="Password Changed.";
 						$this->setOutput(self::$SUCCESS, $gcotd_msg);
 					} 
@@ -185,8 +225,21 @@ class Auth extends Connect{
 	public function acceptCookies(){
 		$accepted = $_POST["cookies_accepted"];
 		if($accepted == '0'){
-			setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], time() + 
-				(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+			$arr_cookie_options = array (
+				'expires' => time() + (60 * 60 * 24 * 184),
+				'path' => '/',
+				'domain' => $this->get_domain(),
+				'secure' => $this->get_secure(),
+				'httponly' => true,
+				'samesite' => 'Strict'
+			);
+			if (explode('.', PHP_VERSION)[0] < 7){
+				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], time() +
+					(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+			}
+			else{
+				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], $arr_cookie_options);
+			}
 			$this->setOutput(self::$SUCCESS, $this->user_data);
 		}
 	}

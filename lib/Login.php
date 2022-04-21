@@ -106,11 +106,30 @@ class Login extends Connect{
 					}
 					else
 					{
-						setcookie($this->get_cookie_name()."guest", "", time() - 3600, "/", $this->get_domain(), $this->get_secure(), 1);
+						$arr_cookie_options = array (
+							'expires' => time() - 3600,
+							'path' => '/',
+							'domain' => $this->get_domain(),
+							'secure' => $this->get_secure(),
+							'httponly' => true,
+							'samesite' => 'Strict'
+						);
+						if (explode('.', PHP_VERSION)[0] < 7){
+							setcookie($this->get_cookie_name()."guest", "", time() +
+								(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+						}
+						else{
+							setcookie($this->get_cookie_name()."guest", "", $arr_cookie_options);
+						}
 						unset($_COOKIE[$this->get_cookie_name()."guest"]);
 						// set cookie that expires in 6 months
-						setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], 
-							time() + (60 * 60 * 24 * 184), "/", $this->get_domain(), $this->get_secure(), 1);
+						if (explode('.', PHP_VERSION)[0] < 7){
+							setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], time() +
+								(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+						}
+						else{
+							setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], $arr_cookie_options);
+						}
 						$success = true;
 						$gcotd_msg.="You are being logged in, 
 							please wait a few moments.";
@@ -125,11 +144,29 @@ class Login extends Connect{
 		}
 	}
 	public function logout(){
-		setcookie($this->get_cookie_name(), "", time() - 3600, "/", $this->get_domain(), $this->get_secure(), 1);
+		$arr_cookie_options = array (
+			'expires' => time() - 3600,
+			'path' => '/',
+			'domain' => $this->get_domain(),
+			'secure' => $this->get_secure(),
+			'httponly' => true,
+			'samesite' => 'Strict'
+		);
+		if (explode('.', PHP_VERSION)[0] < 7){
+			setcookie($this->get_cookie_name(), "", time() +
+				(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+			setcookie($this->get_cookie_name()."terms", false, time() +
+				(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+			setcookie($this->get_cookie_name()."guest", false, time() +
+				(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+		}
+		else{
+			setcookie($this->get_cookie_name(), "", $arr_cookie_options);
+			setcookie($this->get_cookie_name()."terms", false, $arr_cookie_options);
+			setcookie($this->get_cookie_name()."guest", false, $arr_cookie_options);
+		}
 		unset($_COOKIE[$this->get_cookie_name()]);
-		setcookie($this->get_cookie_name()."terms", false, time() - 3600, "/", $this->get_domain(), $this->get_secure(), 1);
 		unset($_COOKIE[$this->get_cookie_name()."terms"]);
-		setcookie($this->get_cookie_name()."guest", false, time() - 3600, "/", $this->get_domain(), $this->get_secure(), 1);
 		unset($_COOKIE[$this->get_cookie_name()."guest"]);
 		$gcotd_msg="Logged out";
 		$this->setOutput(self::$SUCCESS, $gcotd_msg);

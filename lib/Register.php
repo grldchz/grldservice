@@ -203,7 +203,7 @@ class Register extends Connect{
 				$success = false;
 				$gcotd_msg="".
 					"Failed to send email to $email with ".
-					"registration details"; 
+					"registration details. Please check your email and try again."; 
 				$this->setOutput(self::$FAIL, $gcotd_msg);
 				$select_stmt = $this->getDb()->query(
 					"delete from users where id='".$user_id."'");
