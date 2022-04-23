@@ -34,7 +34,8 @@ class Posts extends Connect{
 		'deleted',
 		'num_photos',
 		'num_videos',
-		'open_public'
+		'open_public',
+		'image_title'
 	);	
 	private $auth;
 	private $content_id;
@@ -103,7 +104,7 @@ class Posts extends Connect{
 				$this->parent_id = 0;
 			}
 			$contents_sql = "select SQL_CALC_FOUND_ROWS 
-				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public,
+				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public, c.image_title,
 				u.first_name, u.img_file, u.last_name, u.create_date_time as user_date_time, u.description
 				from contents c
 				join users u on c.user_name=u.name
@@ -214,7 +215,6 @@ class Posts extends Connect{
 					if($decodedComment != null){
 					$postsArr[$idx]["comment"] = $decodedComment;
 					}
-						
 					$idx = $idx + 1;
 				}
 				$postsWithReplies = $this->getPostsWithReplies($postsArr, null);

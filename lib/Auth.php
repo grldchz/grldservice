@@ -238,7 +238,11 @@ class Auth extends Connect{
 					(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
 			}
 			else{
+				//foreach ($arr_cookie_options as $name => $value) {
+					//file_put_contents("/var/www/html/grldservice/debug.log", "$name: $value\n", FILE_APPEND);
+				//}
 				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], $arr_cookie_options);
+				//file_put_contents("/var/www/html/grldservice/debug.log", "Auth.php: setcookie successful\n", FILE_APPEND);
 			}
 			$this->setOutput(self::$SUCCESS, $this->user_data);
 		}

@@ -254,10 +254,11 @@ class Utils extends Connect{
 		$sql = "select * from media where
 		content_id='".$contentId."' and
 		file='".$trueFile."'";
-		$mediaQuery = $this->getDb()->query($sql);
-		$mediaQueryResult = $mediaQuery->fetch(PDO::FETCH_ASSOC);
-		if($mediaQueryResult->rowCount() > 0){
-			$photoCaption = $mediaQueryResult["title"];
+		$stmt = $this->getDb()->prepare($sql);
+		$stmt->execute();
+		if($stmt->rowCount() === 1){
+			$mediaRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+			$photoCaption = $mediaRecord["title"];
 		}
 		return $photoCaption;
 	}

@@ -1,23 +1,4 @@
---
---    GRLDCHZ - a PHP REST-like backing for a social network
---	/grldservice/grldchz.sql is part of GRLDCHZ
---	
---    Copyright (C) 2021 grilledcheeseoftheday.com
---
---    GRLDCHZ is free software: you can redistribute it and/or modify
---    it under the terms of the GNU General Public License as published by
---    the Free Software Foundation, either version 3 of the License, or
---    (at your option) any later version.
---
---    GRLDCHZ is distributed in the hope that it will be useful,
---    but WITHOUT ANY WARRANTY; without even the implied warranty of
---    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---    GNU General Public License for more details.
---
---    You should have received a copy of the GNU General Public License
---    along with this program.  If not, see <http://www.gnu.org/licenses/>.
---
-
+USE grldchz;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -26,13 +7,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `guest_db`
---
-CREATE DATABASE IF NOT EXISTS `guest_db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `guest_db`;
-
 
 
 -- --------------------------------------------------------
@@ -54,6 +28,8 @@ CREATE TABLE IF NOT EXISTS `contents` (
   `deleted` tinyint(1) NOT NULL,
   `num_photos` int(4) NOT NULL DEFAULT '0',
   `num_videos` int(4) NOT NULL DEFAULT '0',
+  `open_public` tinyint(1) NOT NULL,
+  `image_title` varchar(200) DEFAULT NULL
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
 
@@ -91,6 +67,8 @@ CREATE TABLE IF NOT EXISTS `skillet` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
 INSERT INTO `skillet` (`user_id`, `friend_id`, `hidden`, `accepted`) VALUES (1, 1, 0, 0);
+INSERT INTO `skillet` (`user_id`, `friend_id`, `hidden`, `accepted`) VALUES (2, 2, 0, 0);
+INSERT INTO `skillet` (`user_id`, `friend_id`, `hidden`, `accepted`) VALUES (1, 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -122,12 +100,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `img_margin_top` decimal(10,0) DEFAULT NULL,
   `img_json` varchar(200) DEFAULT NULL,
   `banner_json` varchar(200) DEFAULT NULL,
+  `device` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=0 ;
 INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`) VALUES
 ('admin', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'admin@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Administration Account', 'Administration', 'Account', 0, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`) VALUES
-('guest', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'guest@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Guest Account', 'Guest', 'Account', 0, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL);
+('guest', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'guest@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Guest Account', 'Guest', 'Account', 1, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL);
 -- the password is changeme
 -- change it using genpass.php
 -- copy and paste the result into the insert above

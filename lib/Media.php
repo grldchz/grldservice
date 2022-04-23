@@ -147,6 +147,7 @@ class Media extends Utils{
 			$stmt->bindValue(':thisUserName',  $this->auth->user_data['name'], PDO::PARAM_STR);
 			$stmt->execute();
 			if($stmt->rowCount() === 1){				
+				$mediaRecord = $stmt->fetch(PDO::FETCH_ASSOC);
 				// construct update sql statement
 				$sql = "update media set
 					title=:postCaption
@@ -155,6 +156,15 @@ class Media extends Utils{
 				$stmt->bindValue(':postCaption',  $postCaption, PDO::PARAM_STR);
 				$stmt->bindValue(':postMediaId',  intval($postMediaId), PDO::PARAM_INT);
 				$stmt->execute();
+				$content_id = $mediaRecord["content_id"];
+				$sql = "update contents set
+					image_title=:imageTitle
+					where id=:content_id";
+				$stmt = $this->getDb()->prepare($sql);
+				$stmt->bindValue(':imageTitle',  $postCaption, PDO::PARAM_STR);
+				$stmt->bindValue(':content_id',  intval($content_id), PDO::PARAM_INT);
+				$stmt->execute();
+				file_put_contents("/var/www/html/grldservice/debug.log", "Media.php: \n", FILE_APPEND);
 				$gcotd_msg = "Caption successfully posted.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);
 			}

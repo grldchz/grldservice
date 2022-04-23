@@ -107,21 +107,13 @@ class Login extends Connect{
 					else
 					{
 						$arr_cookie_options = array (
-							'expires' => time() - 3600,
+							'expires' => time() + (60 * 60 * 24 * 184),
 							'path' => '/',
 							'domain' => $this->get_domain(),
 							'secure' => $this->get_secure(),
 							'httponly' => true,
 							'samesite' => 'Strict'
 						);
-						if (explode('.', PHP_VERSION)[0] < 7){
-							setcookie($this->get_cookie_name()."guest", "", time() +
-								(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
-						}
-						else{
-							setcookie($this->get_cookie_name()."guest", "", $arr_cookie_options);
-						}
-						unset($_COOKIE[$this->get_cookie_name()."guest"]);
 						// set cookie that expires in 6 months
 						if (explode('.', PHP_VERSION)[0] < 7){
 							setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], time() +
@@ -129,6 +121,7 @@ class Login extends Connect{
 						}
 						else{
 							setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], $arr_cookie_options);
+							//file_put_contents("/var/www/html/grldservice/debug.log", "Login.php: setcookie successful\n", FILE_APPEND);
 						}
 						$success = true;
 						$gcotd_msg.="You are being logged in, 
