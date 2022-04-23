@@ -1,25 +1,9 @@
 <?php
 /**
-    GRLDCHZ - a PHP REST-like backing for a social network
-	/grldservice/lib/Register.php is part of GRLDCHZ
-	
-    Copyright (C) 2021 grilledcheeseoftheday.com
+This is a part of the GRLDCHZ Social network
 
-    GRLDCHZ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    GRLDCHZ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Copyright (C) 2008 grilledcheeseoftheday.com
 **/
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
