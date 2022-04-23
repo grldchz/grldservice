@@ -556,9 +556,10 @@ class Utils extends Connect{
 			}
 			try{
 				$stmt = $this->getDb()->prepare("update contents set
-					image=:image 
+					image=:image, image_title=:imageTitle 
 					where id=:id");
 				$stmt->bindValue(':image',  $mainImage, PDO::PARAM_STR);
+				$stmt->bindValue(':imageTitle',  $mainImage, PDO::PARAM_STR);
 				$stmt->bindValue(':id',  intval($id), PDO::PARAM_INT);
 				$stmt->execute();
 				$this->setOutput(self::$SUCCESS, $image);
