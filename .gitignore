@@ -1,3 +1,4 @@
 .env
 arvixe.grldservice-dev.env
 media
+*.log

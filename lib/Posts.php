@@ -35,6 +35,9 @@ class Posts extends Connect{
 		$num = func_num_args();
 		$args = func_get_args();
 		switch($num){
+			case 3:
+				$this->__call('__construct3', $args);
+				break;
 			case 2:
 				$this->__call('__construct2', $args);
 				break;
@@ -82,6 +85,14 @@ class Posts extends Connect{
 		$this->sortParams = '[{"property":"id","direction":"desc"}]';
 		$this->start = "0";
 		$this->limit = "10";
+	}
+	public function __construct3(Auth $auth, $start, $limit){
+		parent::__construct();
+		$this->auth = $auth;
+		$this->sortParams = '[{"property":"id","direction":"desc"}]';
+		$this->start = $start;
+		$this->limit = $limit;
+		//file_put_contents("/var/www/html/grldservice/debug.log", "Posts.php: construct3; start=$this->start; limit=$this->limit; sortParams=$this->sortParams\n", FILE_APPEND);
 	}
 	public function getPosts(){
 		if($this->sortParams != null && 

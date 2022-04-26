@@ -19,7 +19,25 @@ class Media extends Utils{
 	private $sortParams;
 	private $start;
 	private $limit;
-	public function __construct(Auth $auth){
+	public function __construct(){
+		$num = func_num_args();
+		$args = func_get_args();
+		switch($num){
+			case 3:
+				$this->__call('__construct3', $args);
+				break;
+			case 2:
+				$this->__call('__construct2', $args);
+				break;
+			default:
+				$this->__call('__construct1', $args);
+		}
+    }
+	public function __call($name, $arg){
+		return call_user_func_array(array($this, $name), $arg);
+	}
+	
+	public function __construct1(Auth $auth){
 		parent::__construct($auth);
 		$this->auth = $auth;
 		if(isset($_GET["media_id"]) && $_GET["media_id"] != null){
@@ -44,6 +62,17 @@ class Media extends Utils{
 		if(isset($_GET["toDate"]) && $_GET["toDate"] != null){
 			$this->toDate = $_GET["toDate"];
 		}
+	}
+	public function __construct2(Auth $auth, $content_id){
+		parent::__construct($auth);
+		$this->auth = $auth;
+		$this->content_id = $content_id;
+	}
+	public function __construct3(Auth $auth, $content_id, $media_id){
+		parent::__construct($auth);
+		$this->auth = $auth;
+		$this->content_id = $content_id;
+		$this->media_id = $media_id;
 	}
 	public function getMedia(){
 		if($this->content_id != null){
@@ -150,7 +179,7 @@ class Media extends Utils{
 				$stmt->bindValue(':imageTitle',  $postCaption, PDO::PARAM_STR);
 				$stmt->bindValue(':content_id',  intval($content_id), PDO::PARAM_INT);
 				$stmt->execute();
-				file_put_contents("/var/www/html/grldservice/debug.log", "Media.php: \n", FILE_APPEND);
+				//file_put_contents("/var/www/html/grldservice/debug.log", "Media.php: \n", FILE_APPEND);
 				$gcotd_msg = "Caption successfully posted.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);
 			}
