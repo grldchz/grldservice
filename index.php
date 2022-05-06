@@ -3,7 +3,7 @@
 /**
 	This is a part of the GRLDCHZ Social network
 
-	Copyright (C) 2008 grilledcheeseoftheday.com
+	Copyright (C) 2022 grilledcheeseoftheday.com
 
     GRLDCHZ is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,12 +16,12 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see http://www.gnu.org/licenses/.
 **/
 -->
 <html lang="en">
 <head>
-	<title>GRLDCHZ</title>
+	<title>Grilled Cheese of the Day</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link rel="stylesheet" href="../grldchz/js/lib/bootstrap-3.3.5-dist/css/bootstrap.min.css">

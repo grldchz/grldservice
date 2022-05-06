@@ -66,19 +66,19 @@ class Utils extends Connect{
 	}
 	public function createJpeg($path, $mediaFile){
 		$file = $path."/".$mediaFile;
-                $output_filename = $path."/img_thumb_".$mediaFile.".jpeg";
+        $output_filename = $path."/img_thumb_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=600x450 ".
 			$file." -auto-orient -thumbnail 100x80 -unsharp 0x.5 ".$output_filename;
 		exec($cmd);
-                $output_filename = $path."/img_profile_".$mediaFile.".jpeg";
+        $output_filename = $path."/img_profile_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=600x450 ".
 			$file." -auto-orient -thumbnail 200x150 -unsharp 0x.5 ".$output_filename;
 		exec($cmd);
-                $output_filename = $path."/img_slide_".$mediaFile.".jpeg";
+        $output_filename = $path."/img_slide_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=1600x1200 ".
 			$file." -auto-orient -thumbnail 600x450 -unsharp 0x.5 ".$output_filename;
 		exec($cmd);
-                $output_filename = $path."/img_full_".$mediaFile.".jpeg";
+        $output_filename = $path."/img_full_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=1600x1200 ".
 			$file." -auto-orient -thumbnail 1600x1200 -unsharp 0x.5 ".$output_filename;        
 		exec($cmd);

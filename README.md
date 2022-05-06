@@ -1,14 +1,12 @@
-This is a part of the GRLDCHZ Social network
-
-Copyright (C) 2008 grilledcheeseoftheday.com
-
 # GRLDSERVICE
 
-PHP REST-like service for backing [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
+PHP REST-like backend for [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
 
-REST-like in that all calls to it respond with JSON.
+REST-like in that all calls to it respond with JSON.  Not REST-like because it uses query parameters instead of path parameters.
 
-Photos are processed into lower resolution, space saving web format, that allows for faster load times over the internet.
+Media files are uploaded and stored on the file system (as opposed to the database). 
+
+Image files are processed into lower resolution using imagemagick.
 
 ## Run-time Dependencies
 
@@ -23,10 +21,14 @@ Photos are processed into lower resolution, space saving web format, that allows
 
 ## Get Started
 
-Either create database grldchz manually or uncomment create database lines in grldchz.sql.
+See [grldenv](https://github.com/grldchz/grldenv) if you want to spin up a docker environment.  Otherwise, do the following.
+
+Create a database schema.
 
 Execute grldchz.sql on the MySQL Database
 
-Create lib/.env for your environment.  See lib/example.env for more info.
+Create lib/.env for your environment.  Use [lib/example.env](lib/example.env) as an example.
 
-Copy the grldservice directory to public_html directory of Apache
+Copy the grldservice directory to public_html directory of Apache.
+
+All calls to grldservice are authenticated with cookies.  There is no API access.  You must authenticate through the UI.

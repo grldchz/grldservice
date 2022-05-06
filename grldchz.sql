@@ -1,9 +1,4 @@
--- This is a part of the GRLDCHZ Social network
-
--- Copyright (C) 2008 grilledcheeseoftheday.com
-
-
-USE grldchz;
+-- USE grldchz;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 

@@ -77,11 +77,18 @@ class Media extends Utils{
 	public function getMedia(){
 		if($this->content_id != null){
 			$media_sql = "select SQL_CALC_FOUND_ROWS m.id,m.content_id,c.user_name,m.file,m.title,m.num_hits 
-				from media m inner join contents c on c.id=m.content_id where m.content_id=:content_id
+				from media m 
+				inner join contents c on c.id=m.content_id and c.deleted=0 and c.parent_id=0
+				join users u on c.user_name=u.name
+				inner join skillet s on
+					(s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id) or c.open_public = 1
+					and s.accepted=0 and s.hidden=0
+				where m.content_id=:content_id
 				and m.deleted=0";
 			if($this->media_id != null){
 				$media_sql .= ' and m.id='.$this->media_id;
 			}
+			$media_sql .= ' group by m.id';
 			if($this->sortParams != null){
 				$sortArr = json_decode($this->sortParams, true);
 				foreach($sortArr as $sortObj){
