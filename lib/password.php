@@ -1,10 +1,5 @@
 <?php
 /**
-This is a part of the GRLDCHZ Social network
-
-Copyright (C) 2008 grilledcheeseoftheday.com
-**/
-/**
 	The following code was copied from http://stackoverflow.com/questions/1846202/php-how-to-generate-a-random-unique-alphanumeric-string/13733588#13733588
 **/
 function crypto_rand_secure($min, $max) {

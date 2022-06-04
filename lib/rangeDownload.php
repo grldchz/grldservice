@@ -1,10 +1,5 @@
 <?PHP
 /**
-This is a part of the GRLDCHZ Social network
-
-Copyright (C) 2008 grilledcheeseoftheday.com
-**/
-/**
 	The following code was copied from https://mobiforge.com/design-development/content-delivery-mobile-devices
 	Appendix A: Streaming for Apple iPhone
 **/

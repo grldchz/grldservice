@@ -1,10 +1,5 @@
 <?PHP
 /**
-This is a part of the GRLDCHZ Social network
-
-Copyright (C) 2008 grilledcheeseoftheday.com
-**/
-/**
 	The following code was copied from http://php.net/manual/en/function.mime-content-type.php
 **/
 if(!function_exists('mime_content_type')) {

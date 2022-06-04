@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!--
 /**
-	This is a part of the GRLDCHZ Social network
+	This is a part of the grilledcheeseoftheday.com
 
 	Copyright (C) 2022 grilledcheeseoftheday.com
 
