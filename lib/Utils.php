@@ -349,7 +349,7 @@ class Utils extends Connect{
 			$this->getDb()->query($query);	
 		}*/	
 		else if(stripos($mediaFile, "proxy_mp4_") === 0){
-			//file_put_contents("headers.log", "mediaFile: $mediaFile\n", FILE_APPEND);
+			//file_put_contents($this->get_path()."/debug.log", "mediaFile: $mediaFile\n", FILE_APPEND);
 			$parts = pathinfo($mediaFile);
 			$ext = ".".$parts ['extension'];
 			$srcFileName = substr($mediaFile, 10, strripos($mediaFile, $ext)-strlen($mediaFile));
@@ -558,6 +558,34 @@ class Utils extends Connect{
 				$this->setOutput(self::$FAIL, $gcotd_msg);
 			}		
 		}
+	}
+	public function updateSitemap($contentId, $mediaId, $remove){
+		$protocol = $this->get_secure()==1?"https://":"http://";
+		$domain = $this->get_domain()?$this->get_domain():"localhost";
+		$contentIdUrl = $protocol."www.".$domain.$this->get_ui_context()."/content/".$contentId."/";
+		$url = $protocol."www.".$domain.$this->get_ui_context()."/content/".$contentId;
+		if($mediaId){
+			$url.="/".$mediaId;
+		}
+		$url.="/index.php";
+		$file = "../".$this->get_ui_context()."/sitemap.txt";
+		$contents = file_get_contents($file);
+		$escapedUrl = preg_quote($url, '/');
+		$pattern = "/^.*$escapedUrl.*\$/m";
+		//file_put_contents($this->get_path()."/debug.log", "\nUtils.php: updateSitemap; contentId=$contentId; mediaId=$mediaId; remove=$remove", FILE_APPEND);
+		if(preg_match_all($pattern, $contents, $matches)){
+			if($remove == 1){
+				$contentIdUrl = preg_quote($contentIdUrl, '/');
+				$pattern = "/\n$contentIdUrl.*\$/m";
+				//file_put_contents($this->get_path()."/debug.log", "\nUtils.php: updateSitemap; pattern=$pattern", FILE_APPEND);
+				$contents = preg_replace($pattern, '', $contents);
+				file_put_contents($file, $contents);
+			}
+		}
+		else{
+			file_put_contents($file, "\n$url", FILE_APPEND);
+		}
+
 	}
 }
 ?>

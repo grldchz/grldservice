@@ -76,7 +76,7 @@ class Media extends Utils{
 	}
 	public function getMedia(){
 		if($this->content_id != null){
-			$media_sql = "select SQL_CALC_FOUND_ROWS m.id,m.content_id,c.user_name,m.file,m.title,m.num_hits 
+			$media_sql = "select SQL_CALC_FOUND_ROWS m.id,m.content_id,c.user_name,m.file,m.title,m.num_hits,c.open_public 
 				from media m 
 				inner join contents c on c.id=m.content_id and c.deleted=0 and c.parent_id=0
 				join users u on c.user_name=u.name
@@ -161,7 +161,7 @@ class Media extends Utils{
 			$postCaption = str_replace("\n", "<br>", $postCaption);
 			try{
 			// construct select sql statement
-			$sql = "select m.id, m.content_id, m.id from media m 
+			$sql = "select m.id, m.content_id, m.id, c.open_public from media m 
 				join contents c on c.id = m.content_id and c.user_name=:thisUserName
 				where m.id=:postMediaId";
 			$stmt = $this->getDb()->prepare($sql);
@@ -179,6 +179,7 @@ class Media extends Utils{
 				$stmt->bindValue(':postMediaId',  intval($postMediaId), PDO::PARAM_INT);
 				$stmt->execute();
 				$content_id = $mediaRecord["content_id"];
+				$open_public = $mediaRecord["open_public"];
 				$sql = "update contents set
 					image_title=:imageTitle
 					where id=:content_id";
@@ -186,9 +187,12 @@ class Media extends Utils{
 				$stmt->bindValue(':imageTitle',  $postCaption, PDO::PARAM_STR);
 				$stmt->bindValue(':content_id',  intval($content_id), PDO::PARAM_INT);
 				$stmt->execute();
-				//file_put_contents("/var/www/html/grldservice/debug.log", "Media.php: \n", FILE_APPEND);
 				$gcotd_msg = "Caption successfully posted.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);
+				//file_put_contents($this->get_path()."/debug.log", "Media.php: open_public=$open_public\n", FILE_APPEND);
+				if($open_public == 1){
+					$this->updateSitemap($content_id, $postMediaId, null);
+				}
 			}
 			else{
 				$this->setOutput(self::$FAIL, $postMediaId." does not exist");				

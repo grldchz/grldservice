@@ -2,10 +2,11 @@
 /**
 This is a part of the GRLDCHZ Social network
 
-Copyright (C) 2008 grilledcheeseoftheday.com
+Copyright (C) 2022 grilledcheeseoftheday.com
 **/
 require_once(dirname(__FILE__).'/Connect.php');
 require_once(dirname(__FILE__).'/Skillet.php');
+require_once(dirname(__FILE__).'/Utils.php');
 class Posts extends Connect{
 	private static $CONTENTS_COLS = array(
 		'id', 
@@ -92,14 +93,20 @@ class Posts extends Connect{
 		$this->sortParams = '[{"property":"id","direction":"desc"}]';
 		$this->start = $start;
 		$this->limit = $limit;
-		//file_put_contents("/var/www/html/grldservice/debug.log", "Posts.php: construct3; start=$this->start; limit=$this->limit; sortParams=$this->sortParams\n", FILE_APPEND);
+		//file_put_contents($this->get_path()."/debug.log", "\nPosts.php: construct3; start=$this->start; limit=$this->limit; sortParams=$this->sortParams\n", FILE_APPEND);
 	}
 	public function getPosts(){
+		$utils = new Utils($this->auth);
 		if($this->sortParams != null && 
 			$this->start != null && $this->limit != null){
+			//file_put_contents($this->get_path()."/debug.log", "\nGetting posts", FILE_APPEND);
 			if($this->parent_id == null){
 				$this->parent_id = 0;
 			}
+			//ob_flush();
+			//ob_start();
+			//var_dump($this->auth->user_data);
+			//file_put_contents($this->get_path()."/debug.log", ob_get_flush(), FILE_APPEND);
 			$contents_sql = "select SQL_CALC_FOUND_ROWS 
 				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public, c.image_title,
 				u.first_name, u.img_file, u.last_name, u.create_date_time as user_date_time, u.description
@@ -166,6 +173,7 @@ class Posts extends Connect{
 			}
 			try {
 				$results = $this->getDb()->prepare($contents_sql);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; contents_sql=$contents_sql\n", FILE_APPEND);
 				if($this->content_id != null && !isset($this->searchTerm) && !isset($this->fromDate) && !isset($this->toDate)){
 					$results->bindValue(':content_id', intval(trim($this->content_id)), PDO::PARAM_INT);
 				}
@@ -198,6 +206,13 @@ class Posts extends Connect{
 					$results->bindValue(':start', intval(trim($this->start)), PDO::PARAM_INT);
 					$results->bindValue(':limit', intval(trim($this->limit)), PDO::PARAM_INT);
 				}
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->parent_id=$this->parent_id\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->content_id=$this->content_id\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->searchTerm=$this->searchTerm\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->fromDate=$this->fromDate\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->toDate=$this->toDate\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->start=$this->start\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; this->limit=$this->limit\n", FILE_APPEND);
 				$results->execute();
 				$resCount = $this->getDb()->query('SELECT FOUND_ROWS()');
 				$total = (int) $resCount->fetchColumn(); 
@@ -205,7 +220,7 @@ class Posts extends Connect{
 				$idx = 0;
 				foreach($postsArr as $post){
 					$last_initial = substr($post["last_name"],0,1)."."; 
-					$postsArr[$idx]["last_name"] = $last_initial;
+					//$postsArr[$idx]["last_name"] = $last_initial;
 					$thumb = str_replace("img_profile", "img_thumb", $post["img_file"]);
 					$postsArr[$idx]["img_file"] = $thumb;
 					$decodedComment = json_decode($postsArr[$idx]["comment"]);
@@ -218,6 +233,7 @@ class Posts extends Connect{
 				$posts = array(
 					'results'=>$postsWithReplies,
 					'total'=>$total);
+				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; total=$total\n", FILE_APPEND);
 				$this->setOutput(self::$SUCCESS, $posts);
 			} catch(PDOException $ex) {
 				$gcotd_msg="An error occurred getting your posts, sorry.";
@@ -271,7 +287,7 @@ class Posts extends Connect{
 			$idx = 0;
 			foreach($replies as $reply){
 				$last_initial = substr($reply["last_name"],0,1)."."; 
-				$replies[$idx]["last_name"] = $last_initial;
+				//$replies[$idx]["last_name"] = $last_initial;
 				$thumb = str_replace("img_profile", "img_thumb", $reply["img_file"]);
 				$replies[$idx]["img_file"] = $thumb;
 				$decodedReply = json_decode($replies[$idx]["comment"]);
@@ -327,6 +343,7 @@ class Posts extends Connect{
 		}
 
 		$skillet = new Skillet($this->auth);
+		$postOpenPublic = 0;
 		if(isset($_POST["openPublic"]) && $_POST["openPublic"] == "true"){ 
 			if($skillet->checkSkillet(2)){ //user has to be friends with the guest account
 				$postOpenPublic = 1;
@@ -338,10 +355,8 @@ class Posts extends Connect{
 				exit;
 			}				
 		}
-		else{
-			$postOpenPublic = 0;
-		}
 		try{
+			$utils = new Utils($this->auth);
 			// get the editId
 			if(isset($_POST["editId"]) && $_POST["editId"] != ""){
 				$postEditId = $_POST["editId"];
@@ -369,6 +384,12 @@ class Posts extends Connect{
 				else{
 					$gcotd_msg = "Comment successfully updated.";
 					$this->setOutput(self::$SUCCESS, $gcotd_msg);
+					if($postOpenPublic == 1){
+						$utils->updateSitemap($postEditId, null, null);
+					}
+					else{
+						$utils->updateSitemap($postEditId, null, true);
+					}
 				}
 			}
 			else{
@@ -397,6 +418,9 @@ class Posts extends Connect{
 				$stmt->execute();
 				$gcotd_msg = "Comment successfully posted.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);
+				if($postOpenPublic == 1){
+					$utils->updateSitemap($this->getDb()->lastInsertId(), null, null);
+				}
 			}
 			if($postParentId > 0){
 				$sql = "update contents set

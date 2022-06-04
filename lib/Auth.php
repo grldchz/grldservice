@@ -44,7 +44,7 @@ class Auth extends Connect{
 	}
 	private function lookupUserInfo(){
 		//foreach (getallheaders() as $name => $value) {
-		//	file_put_contents("headers.log", "$name: $value\n", FILE_APPEND);
+		//	file_put_contents($this->get_path()."/debug.log", "Auth: lookupUserInfo: header: $name: $value\n", FILE_APPEND);
 		//}
 		if(isset($this->cookie_gcotd)){
 			$cookie_id = substr($this->cookie_gcotd, 0, strpos($this->cookie_gcotd, "."));
@@ -84,6 +84,7 @@ class Auth extends Connect{
 		}
 		else if($terms_accepted == 1 && $this->user_data['name'] != "guest")
 		{
+			//file_put_contents($this->get_path()."/debug.log", "\nAuth Handling terms", FILE_APPEND);
 			if(isset($_POST["terms_accepted"])){
 				$this->acceptTerms();
 			}
@@ -112,6 +113,8 @@ class Auth extends Connect{
 		}
 		else
 		{
+			//file_put_contents($this->get_path()."/debug.log", "\nAuth setting cookie returning user_data", FILE_APPEND);
+
 			$arr_cookie_options = array (
 				'expires' => time() + (60 * 60 * 24 * 184),
 				'path' => '/',
@@ -225,10 +228,10 @@ class Auth extends Connect{
 			}
 			else{
 				//foreach ($arr_cookie_options as $name => $value) {
-					//file_put_contents("/var/www/html/grldservice/debug.log", "$name: $value\n", FILE_APPEND);
+					//file_put_contents($this->get_path()."/debug.log", "$name: $value\n", FILE_APPEND);
 				//}
 				setcookie($this->get_cookie_name(), $this->user_data['id'].".".$this->user_data['password'], $arr_cookie_options);
-				//file_put_contents("/var/www/html/grldservice/debug.log", "Auth.php: setcookie successful\n", FILE_APPEND);
+				//file_put_contents($this->get_path()."/debug.log", "Auth.php: setcookie successful\n", FILE_APPEND);
 			}
 			$this->setOutput(self::$SUCCESS, $this->user_data);
 		}

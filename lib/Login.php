@@ -107,7 +107,7 @@ class Login extends Connect{
 						}
 						else{
 							setcookie($this->get_cookie_name(), $user_data['id'].".".$user_data['password'], $arr_cookie_options);
-							//file_put_contents("/var/www/html/grldservice/debug.log", "Login.php: setcookie successful\n", FILE_APPEND);
+							//file_put_contents($this->get_path()."/debug.log", "Login.php: setcookie successful\n", FILE_APPEND);
 						}
 						$success = true;
 						$gcotd_msg.="You are being logged in, 

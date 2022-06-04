@@ -36,7 +36,7 @@ try{
 			$headerRangeValue = $_SERVER['HTTP_RANGE'];
 			if($headerRangeValue == "bytes=0-" || $headerRangeValue == "bytes=0-1"){
 				$utils->updateNumHits($mediaArr[2], $mediaArr[3]);
-				//file_put_contents("headers.log", "headerRangeValue: $headerRangeValue\n", FILE_APPEND);
+				//file_put_contents($auth->get_path()."/debug.log", "headerRangeValue: $headerRangeValue\n", FILE_APPEND);
 			}
 			//rangeDownload($file);
 		}
