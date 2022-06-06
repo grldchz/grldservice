@@ -1,8 +1,6 @@
 # GRLDSERVICE
 
-PHP REST-like backend for [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
-
-REST-like in that all calls to it respond with JSON.  Not REST-like because it uses query parameters instead of path parameters.
+PHP API for [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
 
 Media files are uploaded and stored on the file system (as opposed to the database). 
 
