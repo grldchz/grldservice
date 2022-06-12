@@ -108,6 +108,25 @@ class Posts extends Connect{
 		$this->limit = $limit;
 		//file_put_contents($this->get_path()."/debug.log", "\nPosts.php: construct3; start=$this->start; limit=$this->limit; sortParams=$this->sortParams\n", FILE_APPEND);
 	}
+	public function getMainParent($content_id){
+		$parentSql = "select id,parent_id from contents where id=".$content_id;
+		$results = $this->getDb()->prepare($parentSql);
+		$results->execute();
+		$total = $results->rowCount();		
+		if($total == 0){
+			return $content_id;
+		}
+		else{
+			$comment = $results->fetch(PDO::FETCH_ASSOC);
+			if($comment["parent_id"] == 0){
+				return $comment["id"];
+			}
+			else{
+				return $this->getMainParent($comment["parent_id"]);
+			}
+		}
+		
+	}
 	public function getPosts(){
 		$utils = new Utils($this->auth);
 		if($this->sortParams != null && 
@@ -188,7 +207,7 @@ class Posts extends Connect{
 				$results = $this->getDb()->prepare($contents_sql);
 				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; contents_sql=$contents_sql\n", FILE_APPEND);
 				if($this->content_id != null && !isset($this->searchTerm) && !isset($this->fromDate) && !isset($this->toDate)){
-					$results->bindValue(':content_id', intval(trim($this->content_id)), PDO::PARAM_INT);
+					$results->bindValue(':content_id', intval(trim($this->getMainParent($this->content_id))), PDO::PARAM_INT);
 				}
 				if(isset($this->searchTerm)){
 					if(count($searchTermArr) > 0){

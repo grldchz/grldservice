@@ -203,9 +203,9 @@ class Media extends Utils{
 				$gcotd_msg = "Caption successfully posted.";
 				$this->setOutput(self::$SUCCESS, $gcotd_msg);
 				//file_put_contents($this->get_path()."/debug.log", "Media.php: open_public=$open_public\n", FILE_APPEND);
-				if($open_public == 1){
-					$this->updateSitemap($content_id, $postMediaId, null);
-				}
+				//if($open_public == 1){
+				//	$this->updateSitemap($content_id, $postMediaId, null);
+				//}
 			}
 			else{
 				$this->setOutput(self::$FAIL, $postMediaId." does not exist");				
