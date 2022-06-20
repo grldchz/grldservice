@@ -29,4 +29,8 @@ Create lib/.env for your environment.  Use [lib/example.env](lib/example.env) as
 
 Copy the grldservice directory to public_html directory of Apache.
 
-All calls to grldservice are authenticated with cookies.  There is no API access.  You must authenticate through the UI.
+While all calls to grldservice are authenticated with cookies, public posts will be returned without a cookie.
+
+```
+https://www.grilledcheeseoftheday.com/grldservice-dev/service.php?get=posts&limit=10&sort=[{"property":"id","direction":"desc"}]&start=0
+```
