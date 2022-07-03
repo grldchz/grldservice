@@ -102,8 +102,6 @@ class Auth extends Connect{
 				$this->acceptTerms();
 			}
 			else{
-				$gcotd_msg="Terms not accepted";
-				$this->setOutput(self::$TERMS, $gcotd_msg);
 
 				$arr_cookie_options = array (
 					'expires' => time() + (60 * 60 * 24 * 184),
@@ -116,12 +114,15 @@ class Auth extends Connect{
 				if (explode('.', PHP_VERSION)[0] < 7){
 					setcookie($this->get_cookie_name()."terms", true, time() +
                         (60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
+					setcookie($this->get_cookie_name(), "", time() +
+						(60 * 60 * 24 * 184), "/; samesite=strict", $this->get_domain(), $this->get_secure(), 1); // 6 months
 				}
 				else{
 					setcookie($this->get_cookie_name()."terms", true, $arr_cookie_options);
+					setcookie($this->get_cookie_name(), "", $arr_cookie_options);
 				}
-				print $this->printOutput();
-				exit;
+				$gcotd_msg="Terms not accepted";
+				$this->setOutput(self::$TERMS, $gcotd_msg);
 			}
 		}
 		else

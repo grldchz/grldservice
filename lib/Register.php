@@ -201,13 +201,16 @@ class Register extends Connect{
 			else{
 				$success = false;
 				$gcotd_msg="".
-					"Failed to send email to $email with ".
-					"registration details. Please check your email and try again."; 
+					"Account created, however, failed to send email to $email with ".
+					"registration details. Please check your email and try again.  ".
+					"Or, contact ".$this->get_admin_email()." for more information."; 
 				$this->setOutput(self::$FAIL, $gcotd_msg);
+				/*
 				$select_stmt = $this->getDb()->query(
 					"delete from users where id='".$user_id."'");
 				$select_stmt = $this->getDb()->query(
 					"delete from skillet where user_id='".$user_id."' or friend_id='".$user_id."'");
+				*/
 			}
 		}
 		else
