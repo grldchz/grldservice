@@ -1,6 +1,6 @@
 # GRLDSERVICE
 
-PHP API for [grldchz](https://github.com/grldchz/grldchz-ts)  social network.  grldchz is a social networking platform where you can post text, photos, and videos.
+PHP API for [grldchz](https://github.com/grldchz/grldchz-ts).  GRLDCHZ is a media management system where you can upload images and videos to share with other members of the platform.
 
 Media files are uploaded and stored on the file system (as opposed to the database). 
 
