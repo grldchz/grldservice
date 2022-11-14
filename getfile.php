@@ -46,11 +46,11 @@ try{
 	if(file_exists($path)){
 		// do it for any device that supports byte-ranges not only iPhone
 		if (isset($_SERVER['HTTP_RANGE']))  { 
-			$headerRangeValue = $_SERVER['HTTP_RANGE'];
-			if($headerRangeValue == "bytes=0-" || $headerRangeValue == "bytes=0-1"){
-				$utils->updateNumHits($mediaArr[2], $mediaArr[3]);
+			//$headerRangeValue = $_SERVER['HTTP_RANGE'];
+			//if($headerRangeValue == "bytes=0-" || $headerRangeValue == "bytes=0-1"){
+			//	$utils->updateNumHits($mediaArr[2], $mediaArr[3]);
 				//file_put_contents($auth->get_path()."/debug.log", "headerRangeValue: $headerRangeValue\n", FILE_APPEND);
-			}
+			//}
 			//rangeDownload($file);
 		}
 		else {

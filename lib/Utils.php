@@ -347,6 +347,7 @@ class Utils extends Connect{
 		$this->getDb()->query('update contents set num_videos = num_videos + 1 where id='.$contentId);		
 	}
 	public function updateNumHits($contentId, $mediaFile){
+		//file_put_contents($this->get_path()."/debug.log", "mediaFile: $mediaFile\n", FILE_APPEND);
 		if(stripos($mediaFile, "img_full_") === 0){
 			$parts = pathinfo($mediaFile);
 			$ext = ".".$parts ['extension'];
@@ -367,7 +368,8 @@ class Utils extends Connect{
 			$ext = ".".$parts ['extension'];
 			$srcFileName = substr($mediaFile, 10, strripos($mediaFile, $ext)-strlen($mediaFile));
 			$query = 'update media set num_hits = num_hits + 1 where content_id='.$contentId.' and file=\''.$srcFileName.'\'';
-			$this->getDb()->query($query);	
+			$this->getDb()->query($query);
+            $this->setOutput(self::$SUCCESS, "hits updated for ".$mediaFile);
 		}		
 	}
 	public function processVideoThumb($path, $mediaFile)

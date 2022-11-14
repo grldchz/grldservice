@@ -180,6 +180,11 @@ try{
 		$skillet->acceptUser($_POST["acceptUser"]);
 		print $skillet->printOutput();		
 	}
+	else if(isset($_POST["updateNumHits"])){
+		$utils = new Utils($auth);
+		$utils->updateNumHits($_POST["content_id"], $_POST["mediafile"]);
+		print $utils->printOutput();
+	}
 	else if(isset($_POST["profile_img"])){
 		$content_id = $_POST["content_id"];
 		$file = $_POST["profile_img"];
