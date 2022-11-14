@@ -19,7 +19,11 @@ Image files are processed into lower resolution using imagemagick.
 
 ## Get Started
 
-See [grldenv](https://github.com/grldchz/grldenv) if you want to spin up a docker environment.  Otherwise, do the following.
+## Docker Development
+
+[grldenv](https://github.com/grldchz/grldenv)
+
+## Non-Docker Development
 
 Create a database schema.
 
