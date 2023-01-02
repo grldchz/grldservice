@@ -85,15 +85,15 @@ class Utils extends Connect{
 		exec($cmd);
         $output_filename = $path."/img_profile_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=600x450 ".
-			$file." -auto-orient -thumbnail 200x150 -unsharp 0x.5 ".$output_filename;
+			$file." -auto-orient -thumbnail 200x150 -unsharp 0x.5 -font DejaVu-Sans -pointsize 4 -draw \"gravity southwest fill black text 0,2 'Copyright ".date("Y")." ".$this->get_title()."' fill white  text 1,1 'Copyright ".date("Y")." ".$this->get_title()."'\" ".$output_filename;
 		exec($cmd);
         $output_filename = $path."/img_slide_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=1600x1200 ".
-			$file." -auto-orient -thumbnail 600x450 -unsharp 0x.5 ".$output_filename;
+			$file." -auto-orient -thumbnail 600x450 -unsharp 0x.5 -font DejaVu-Sans -pointsize 8 -draw \"gravity southwest fill black text 0,2 'Copyright ".date("Y")." ".$this->get_title()."' fill white  text 1,1 'Copyright ".date("Y")." ".$this->get_title()."'\" ".$output_filename;
 		exec($cmd);
         $output_filename = $path."/img_full_".$mediaFile.".jpeg";
 		$cmd = $this->get_imagemagick()." -define jpeg:size=1600x1200 ".
-			$file." -auto-orient -thumbnail 1600x1200 -unsharp 0x.5 ".$output_filename;        
+			$file." -auto-orient -thumbnail 1600x1200 -unsharp 0x.5 -font DejaVu-Sans -pointsize 16 -draw \"gravity southwest fill black text 0,2 'Copyright ".date("Y")." ".$this->get_title()."' fill white  text 1,1 'Copyright ".date("Y")." ".$this->get_title()."'\" ".$output_filename;
 		exec($cmd);
 	}
 	public function createThumb($path, $mediaFile){
@@ -453,6 +453,69 @@ class Utils extends Connect{
 			}
 		}
 		
+	}
+    // This works but was never used.  watermarkMedia.sh used instead
+	public function reprocessImage($path, $file, $contentId){
+		if (file_exists($path."/src/" . $file) && !file_exists($path."/src/" . $file . ".reprocessed"))
+		{
+			if(copy($path."/src/".$file, $path."/".$file)){
+				if($this->isImage($file))
+				{
+					$this->createJpeg($path, $file);
+				}
+                file_put_contents($path."/src/" . $file . ".reprocessed", "SUCCESS");
+				$this->setOutput(self::$SUCCESS, $newId);
+                unlink($path."/".$file);
+			}
+			else{
+                error_log("ERROR: Utils::reprocessImage: Copy Failed: " . $file."\n", FILE_APPEND);
+                $this->setOutput(self::$FAIL, "Copy Failed: " . $file);
+                return false;
+			}
+		}
+        else
+        {
+            error_log("ERROR: Utils::reprocessImage: File Exists: " . $file . ".reprocessed\n", FILE_APPEND);
+            $this->setOutput(self::$FAIL, "File Exists: " . $file . ".reprocessed");
+            return false;
+        }
+        return true;
+	}
+    // This works but was never used.  watermarkMedia.sh used instead
+	public function watermarkImages($path){
+		if($handle = @opendir($path)){ // test_43
+			$photos[] = null;
+			$totalPics=0;
+			$totalVids=0;
+			while (false !== ($dir = readdir($handle))) {
+                if($dir != null && $dir != "." && $dir != ".."){
+                    if($srcHandle = @opendir($path."/".$dir."/src")){ // id
+                        while (false !== ($file = readdir($srcHandle))) {
+                            if($file != null && $file != "." && $file != ".."){
+                                if($this->isImage($file)){
+                                    $totalPics++;
+                                    $photos[] = array($dir, $file);
+                                }
+                                else if($this->isVideo($file)){
+                                    $totalVids++;
+                                }
+                            }
+                        }
+                        closedir($srcHandle);
+                    }
+                }
+			}
+			closedir($handle);
+		}
+        foreach($photos as $photo){
+            if($photo[1] != null){
+                file_put_contents($this->get_path()."/debug.log", "DEBUG: Utils::watermarkImages: reprocessImage(".$path."/".$photo[0].", ".$photo[1].", ".$photo[0].")\n", FILE_APPEND);
+                if(!$this->reprocessImage($path."/".$photo[0], $photo[1], $photo[0])){
+                    $totalPics--;
+                }
+            }
+        }
+        $this->setOutput(self::$SUCCESS, "Watermarked ".$totalPics." in ".$path);
 	}
 	public function deleteMedia($path, $srcFile, $id){
 		try{

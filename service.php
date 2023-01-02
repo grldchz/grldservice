@@ -133,6 +133,27 @@ try{
 		}
 		print $utils->printOutput();
 	}
+    // This works but was never used.  watermarkMedia.sh used instead
+	else if(isset($_POST["reprocessImage"])){
+		$utils = new Utils($auth);
+		if(isset($_POST["id"]) && $_POST["id"] != "" && is_numeric($_POST["id"])){
+			$id = $_POST["id"];
+			$path = $utils->get_media_path()."/".$auth->user_data["name"]."/".$id;
+			$file = $_POST["reprocessImage"];
+			$utils->reprocessImage($path, $file, $id);
+		}
+		else{
+			$utils->setOutput(self::$FAIL, "id is missing or invalid");
+		}
+		print $utils->printOutput();
+	}
+    // This works but was never used.  watermarkMedia.sh used instead
+	else if(isset($_POST["watermark"])){
+		$utils = new Utils($auth);
+        $path = $utils->get_media_path()."/".$auth->user_data["name"];
+        $utils->watermarkImages($path);
+		print $utils->printOutput();
+	}
 	else if(isset($_POST["rotateselected"])){
 		$utils = new Utils($auth);
 		$selectedArray = json_decode($_POST["selected"]);
