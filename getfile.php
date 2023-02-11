@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 **/
-require_once(dirname(__FILE__).'/lib/rangeDownload.php');
+require_once(dirname(__FILE__).'/lib/VideoStream.php');
 require_once(dirname(__FILE__).'/lib/mime_content_type.php');
 require_once(dirname(__FILE__).'/lib/Auth.php');
 require_once(dirname(__FILE__).'/lib/Skillet.php');
@@ -44,29 +44,26 @@ try{
 	}
 	$path = $utils->get_path()."/".$file;
 	if(file_exists($path)){
-		// do it for any device that supports byte-ranges not only iPhone
+        header("Pragma: public");
+        header("Content-Disposition: ".$contentDisposition."; filename=".basename($file));
+        header("Content-Transfer-Encoding: binary");
 		if (isset($_SERVER['HTTP_RANGE']))  { 
 			//$headerRangeValue = $_SERVER['HTTP_RANGE'];
 			//if($headerRangeValue == "bytes=0-" || $headerRangeValue == "bytes=0-1"){
 			//	$utils->updateNumHits($mediaArr[2], $mediaArr[3]);
 				//file_put_contents($auth->get_path()."/debug.log", "headerRangeValue: $headerRangeValue\n", FILE_APPEND);
 			//}
-			//rangeDownload($file);
+            $stream = new VideoStream($file);
+            $stream->start();
 		}
 		else {
 			$utils->updateNumHits($mediaArr[2], $mediaArr[3]);
-			/*
-			header("Pragma: public");
-			header("Expires: 0");
-			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("Content-Disposition: ".$contentDisposition."; filename=".basename($file));
-			header("Content-Transfer-Encoding: binary");
+            header("Cache-Control: max-age=2592000, public");
+            header("Expires: ".gmdate('D, d M Y H:i:s', time()+2592000) . ' GMT');
 			header("Content-Length: ".filesize($file));
+            header("Content-Type:  ".mime_content_type($file));
 			readfile($file);
-			*/
 		}
-		header("Content-Type:  ".mime_content_type($file));
-		rangeDownload($file);
 	}
 	else{
 		error_log("file does not exist: ".$file);

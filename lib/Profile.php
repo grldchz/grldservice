@@ -71,6 +71,9 @@ class Profile extends Connect{
 		if(isset($_POST["email"]) && $_POST["email"] != null){
 			$this->postEmail = $_POST["email"];
 		}
+		if(isset($_POST["showPublic"]) && $_POST["showPublic"] != null){
+			$this->postShowPublic = $_POST["showPublic"]=="true"?1:0;
+		}
 		
 	}
 	public function post(){
@@ -100,20 +103,21 @@ class Profile extends Connect{
         $postDesc = str_replace("<script", "<br>", $postDesc);
         $postDesc = str_replace("<?", "<br>", $postDesc);
         $postDesc = str_replace("\n", "<br>", $postDesc);
-		
 		try{
 			// construct update sql statement
 			$sql = "update users set 
 				description=:postDesc,
 				first_name=:postFirstName,
 				last_name=:postLastName,
-				email=:postEmail
+				email=:postEmail,
+                show_public=:showPublic
 				where id=:userId";
 			$stmt = $this->getDb()->prepare($sql);
 			$stmt->bindValue(':postDesc',  $postDesc, PDO::PARAM_STR);
 			$stmt->bindValue(':postFirstName',  $this->postFirstName, PDO::PARAM_STR);
 			$stmt->bindValue(':postLastName',  $this->postLastName, PDO::PARAM_STR);
 			$stmt->bindValue(':postEmail',  $this->postEmail, PDO::PARAM_STR);
+			$stmt->bindValue(':showPublic',  intval($this->postShowPublic), PDO::PARAM_INT);
 			$stmt->bindValue(':userId',  intval($this->auth->user_data['id']), PDO::PARAM_INT);
 			$stmt->execute();
 		} catch(PDOException $ex) {
@@ -138,7 +142,7 @@ class Profile extends Connect{
 				$this->setOutput(self::$SUCCESS, $this->auth->user_data);
 		}
 		else{
-			$users_sql = "SELECT first_name, last_name, create_date_time, description FROM users WHERE name = :userpage";
+			$users_sql = "SELECT first_name, last_name, create_date_time, description, show_public FROM users WHERE name = :userpage";
 			$results = $this->getDb()->prepare($users_sql);
 			$results->bindValue(':userpage',  trim($this->userPage), PDO::PARAM_STR);
 			$results->execute();

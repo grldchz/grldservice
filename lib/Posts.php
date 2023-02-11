@@ -139,6 +139,7 @@ class Posts extends Connect{
 			//ob_start();
 			//var_dump($this->auth->user_data);
 			//file_put_contents($this->get_path()."/debug.log", ob_get_flush(), FILE_APPEND);
+            if($this->auth->user_data['id']==2){
 			$contents_sql = "select SQL_CALC_FOUND_ROWS 
 				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public, c.image_title,
 				u.first_name, u.img_file, u.last_name, u.create_date_time as user_date_time, u.description
@@ -148,6 +149,30 @@ class Posts extends Connect{
 					(s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id) or c.open_public = 1
 					and s.accepted=0 and s.hidden=0
 				where deleted = 0 and parent_id = :parent_id";
+            }
+            else if($this->auth->user_data['show_public']==0){
+			$contents_sql = "select SQL_CALC_FOUND_ROWS
+				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public, c.image_title,
+				u.first_name, u.img_file, u.last_name, u.create_date_time as user_date_time, u.description
+				from contents c
+				join users u on c.user_name=u.name
+				inner join skillet s on
+					s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id
+					and	s.accepted=0 and s.hidden=0 and c.open_public = 0
+				where deleted = 0 and parent_id = :parent_id";
+            }
+            else {
+			$contents_sql = "select SQL_CALC_FOUND_ROWS
+				c.id, c.user_name, c.comment, c.create_date_time as post_date_time, c.image, c.num_photos, c.num_videos, c.share_id, c.open_public, c.image_title,
+				u.first_name, u.img_file, u.last_name, u.create_date_time as user_date_time, u.description
+				from contents c
+				join users u on c.user_name=u.name
+				inner join skillet s on
+					s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id
+					and	s.accepted=0 and s.hidden=0 and c.open_public = 1
+				where deleted = 0 and parent_id = :parent_id";
+            }
+
 			if($this->content_id != null && !isset($this->searchTerm) && !isset($this->fromDate) && !isset($this->toDate)){
 				$contents_sql .= " and c.id = :content_id";
 			}
@@ -427,12 +452,12 @@ class Posts extends Connect{
 			else{
 
 					// construct insert sql statement
-				$sql = "INSERT INTO contents (comment, user_name, create_date_time, parent_id, open_public";
+				$sql = "INSERT INTO contents (comment, user_name, create_date_time, modify_date_time, parent_id, open_public";
 				if($postShareId != null){
 					$sql .= ", share_id";
 				}
 				$sql .= ")";
-				$sql .= "VALUES (:postComment, :postUserName, :dateTime, :postParentId, :postOpenPublic";
+				$sql .= "VALUES (:postComment, :postUserName, :dateTime, :modTime, :postParentId, :postOpenPublic";
 				if($postShareId != null){
 					$sql .= ", :postShareId";
 				}
@@ -442,6 +467,7 @@ class Posts extends Connect{
 				$stmt->bindValue(':postComment',  $postComment, PDO::PARAM_STR);
 				$stmt->bindValue(':postUserName',  $this->auth->user_data['name'], PDO::PARAM_STR);
 				$stmt->bindValue(':dateTime',  $dateTime, PDO::PARAM_STR);
+				$stmt->bindValue(':modTime',  $dateTime, PDO::PARAM_STR);
 				$stmt->bindValue(':postParentId',  intval($postParentId), PDO::PARAM_INT);
 				$stmt->bindValue(':postOpenPublic',  intval($postOpenPublic), PDO::PARAM_INT);
 				if($postShareId != null){

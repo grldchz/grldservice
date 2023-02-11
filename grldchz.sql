@@ -94,7 +94,8 @@ CREATE TABLE `users` (
   `img_margin_left` decimal(10,0) DEFAULT NULL,
   `img_margin_top` decimal(10,0) DEFAULT NULL,
   `img_json` varchar(200) DEFAULT NULL,
-  `banner_json` varchar(200) DEFAULT NULL
+  `banner_json` varchar(200) DEFAULT NULL,
+  `show_public` tinyint(1) NOT NULL DEFAULT '0  '
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
@@ -155,10 +156,10 @@ ALTER TABLE `users`
   MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;
 
-INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`) VALUES
-('admin', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'admin@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Administration Account', 'Administration', 'Account', 0, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`) VALUES
-('guest', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'guest@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Guest Account', 'Guest', 'Account', 1, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`, `show_public`) VALUES
+('admin', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'admin@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Administration Account', 'Administration', 'Account', 0, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `users` (`name`, `password`, `email`, `ip`, `create_date_time`, `img_file`, `img_caption`, `description`, `first_name`, `last_name`, `terms_accepted`, `banner_img`, `banner_margin_top`, `last_login`, `img_width`, `img_height`, `img_margin_left`, `img_margin_top`, `img_json`, `banner_json`, `show_public`) VALUES
+('guest', '$2y$10$PkNA9Snt/vqdXbrEnJtNYOFoonE.fE6./3x2tahNw9xS80axH4WE6', 'guest@yourdomain.com', '127.0.0.1', '2016-09-21 19:18:00', '', NULL, 'Guest Account', 'Guest', 'Account', 1, NULL, '0', '2016-09-21 19:18:00', NULL, NULL, NULL, NULL, NULL, NULL, 0);
 -- the password is changeme
 -- change it using genpass.php
 -- copy and paste the result into the insert above
