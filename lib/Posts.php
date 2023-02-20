@@ -157,8 +157,8 @@ class Posts extends Connect{
 				from contents c
 				join users u on c.user_name=u.name
 				inner join skillet s on
-					s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id
-					and	s.accepted=0 and s.hidden=0 and c.open_public = 0
+					(s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id) or c.open_public = 0
+					and	s.accepted=0 and s.hidden=0
 				where deleted = 0 and parent_id = :parent_id";
             }
             else {
@@ -168,8 +168,8 @@ class Posts extends Connect{
 				from contents c
 				join users u on c.user_name=u.name
 				inner join skillet s on
-					s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id
-					and	s.accepted=0 and s.hidden=0 and c.open_public = 1
+					(s.user_id = '".$this->auth->user_data['id']."' and u.id = s.friend_id) or c.open_public = 1
+					and	s.accepted=0 and s.hidden=0
 				where deleted = 0 and parent_id = :parent_id";
             }
 

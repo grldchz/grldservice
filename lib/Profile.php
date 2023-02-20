@@ -72,7 +72,7 @@ class Profile extends Connect{
 			$this->postEmail = $_POST["email"];
 		}
 		if(isset($_POST["showPublic"]) && $_POST["showPublic"] != null){
-			$this->postShowPublic = $_POST["showPublic"]=="true"?1:0;
+			$this->postShowPublic = ($_POST["showPublic"]=="true"||$_POST["showPublic"]==1)?1:0;
 		}
 		
 	}
@@ -99,7 +99,8 @@ class Profile extends Connect{
 			$this->setOutput(self::$FAIL, $gcotd_msg);
         }
 		else{
-	    $postDesc = addslashes($this->postDesc);
+            $postDesc = json_encode($this->postDesc);
+	    //$postDesc = addslashes($this->postDesc);
         $postDesc = str_replace("<script", "<br>", $postDesc);
         $postDesc = str_replace("<?", "<br>", $postDesc);
         $postDesc = str_replace("\n", "<br>", $postDesc);
@@ -139,6 +140,11 @@ class Profile extends Connect{
 			$this->setOutput(self::$FAIL, $gcotd_msg);
         }
         else if(!$this->userPage){
+                //file_put_contents($this->get_path()."/debug.log", "\nProfile.php::get: profile[description]=".$this->auth->user_data["description"], FILE_APPEND);
+				$decodedDesc = json_decode($this->auth->user_data["description"]);
+				if($decodedDesc != null){
+					$this->auth->user_data["description"] = $decodedDesc;
+				}
 				$this->setOutput(self::$SUCCESS, $this->auth->user_data);
 		}
 		else{
@@ -153,7 +159,12 @@ class Profile extends Connect{
 				throw new Exception($gcotd_msg);
 			}
 			else{
-				$this->setOutput(self::$SUCCESS, $results->fetch(PDO::FETCH_ASSOC));
+				$profile = $results->fetchAll(PDO::FETCH_ASSOC);
+				$decodedDesc = json_decode($profile["description"]);
+				if($decodedDesc != null){
+					$profile["description"] = $decodedDesc;
+				}
+				$this->setOutput(self::$SUCCESS, profile);
 			}
 		}
 	}

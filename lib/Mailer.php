@@ -69,6 +69,7 @@ class Mailer extends Connect{
 			}
 		} catch (Exception $e) {
 			error_log("Email sending failed. \r\n".$email."\r\n".$subject."\r\n".$body);
+			error_log($e);
 			return false;
 		}
 	}
