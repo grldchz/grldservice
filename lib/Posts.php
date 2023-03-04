@@ -286,9 +286,10 @@ class Posts extends Connect{
 					}
 					$idx = $idx + 1;
 				}
-				$postsWithReplies = $this->getPostsWithReplies($postsArr, null);
+				$postsArr = $this->addReplies($postsArr, null);
+                $postsArr = $this->addPrevNextIds($postsArr);
 				$posts = array(
-					'results'=>$postsWithReplies,
+					'results'=>$postsArr,
 					'total'=>$total);
 				//file_put_contents($this->get_path()."/debug.log", "Posts.php: getPosts; total=$total\n", FILE_APPEND);
 				$this->setOutput(self::$SUCCESS, $posts);
@@ -305,7 +306,7 @@ class Posts extends Connect{
 				$this->setOutput(self::$FAIL, $gcotd_msg);
 			}
 	}
-	private function getPostsWithReplies($posts, $is_share){
+	private function addReplies($posts, $is_share){
 		$postIdx = 0;
 		foreach($posts as $post){
 			$replies_sql = "select SQL_CALC_FOUND_ROWS 
@@ -354,7 +355,7 @@ class Posts extends Connect{
 				$idx = $idx + 1;
 			}
 			$replyIdx = 0;
-			$replies = $this->getPostsWithReplies($replies, $is_share);
+			$replies = $this->addReplies($replies, $is_share);
 			$is_share = 0;
 			$posts[$postIdx]["replies"] = $replies;
 			$postIdx = $postIdx + 1;
@@ -373,6 +374,39 @@ class Posts extends Connect{
 		$skilletClause .= ")";
 		return $skilletClause;
 	}
+    private function addPrevNextIds($posts){
+        if($this->content_id != null){
+            $prevNextSql = "(select c.id from contents c
+            join users u on c.user_name=u.name
+            inner join skillet s on (s.user_id = '".$this->auth->user_data['id']."'
+                and u.id = s.friend_id) or c.open_public = 0
+                and s.accepted=0 and s.hidden=0
+            where c.deleted = 0 and c.id < :content_id1 and c.parent_id=0 order by c.id desc limit 1)
+            union
+            (select c.id from contents c
+            join users u on c.user_name=u.name
+            inner join skillet s on (s.user_id = '".$this->auth->user_data['id']."'
+                and u.id = s.friend_id) or c.open_public = 0
+                and s.accepted=0 and s.hidden=0
+            where c.deleted = 0 and c.id > :content_id2 and c.parent_id=0 order by c.id asc limit 1)
+            order by id
+            limit 2;
+            ";
+            $prevNextQuery = $this->getDb()->prepare($prevNextSql);
+            $prevNextQuery->bindValue(':content_id1', intval(trim($this->content_id)), PDO::PARAM_INT);
+            $prevNextQuery->bindValue(':content_id2', intval(trim($this->content_id)), PDO::PARAM_INT);
+			$prevNextQuery->execute();
+			$prevNextIds = $prevNextQuery->fetchAll(PDO::FETCH_ASSOC);
+            $postIdx = 0;
+            foreach($posts as $post){
+                $posts[$postIdx]["prev_id"] = $prevNextIds[0]["id"];
+                $posts[$postIdx]["next_id"] = $prevNextIds[1]["id"];
+                $postIdx = $postIdx + 1;
+            }
+        }
+		return $posts;
+
+    }
 	public function post(){
 		if($this->auth->user_data['name'] == 'guest'){
 			$this->setOutput(self::$FAIL, "You cannot do anything as Guest.");
